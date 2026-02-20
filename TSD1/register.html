@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Hostel Management</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(to right, #36b9cc, #858796);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 380px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 { color: #333; margin-bottom: 20px; }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #1cc88a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover { background: #17a673; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Hostel Admission</h2>
+    
+    <input type="text" id="fullName" placeholder="Full Name">
+    
+    <div class="row">
+        <input type="text" id="hostelId" placeholder="Hostel ID">
+        <input type="text" id="roomNo" placeholder="Room No">
+    </div>
+
+    <input type="text" id="phone" placeholder="Phone Number">
+    
+    <select id="gender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <hr style="border: 0.5px solid #eee; margin: 15px 0;">
+    
+    <input type="text" id="newUser" placeholder="Set Username">
+    <input type="password" id="newPass" placeholder="Set Password">
+    
+    <button onclick="register()">Register Student</button>
+</div>
+
+<script>
+    function register() {
+        // Collect all values
+        const studentData = {
+            name: document.getElementById("fullName").value,
+            hostelId: document.getElementById("hostelId").value,
+            roomNo: document.getElementById("roomNo").value,
+            phone: document.getElementById("phone").value,
+            gender: document.getElementById("gender").value,
+            user: document.getElementById("newUser").value,
+            pass: document.getElementById("newPass").value
+        };
+
+        // Simple validation check
+        for (let key in studentData) {
+            if (studentData[key] === "") {
+                alert("Please fill in the " + key + " field.");
+                return;
+            }
+        }
+
+        // Store the data as a JSON string
+        // This allows you to store the whole profile under one key
+        localStorage.setItem("studentProfile", JSON.stringify(studentData));
+        
+        // Also keep these for your existing login logic if needed
+        localStorage.setItem("username", studentData.user);
+        localStorage.setItem("password", studentData.pass);
+
+        alert("Admission Successful! Redirecting to login...");
+        window.location.href = "login.html";
+    }
+</script>
+
+</body>
+</html>

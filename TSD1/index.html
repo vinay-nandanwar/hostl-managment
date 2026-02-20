@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hostel Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f7f6;
+            display: flex;
+        }
+
+        /* Sidebar navigation */
+        .sidebar {
+            width: 250px;
+            background: #4e73df;
+            height: 100vh;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+        }
+
+        .sidebar h3 { 
+            border-bottom: 1px solid rgba(255,255,255,0.2); 
+            padding-bottom: 15px; 
+            margin-bottom: 20px;
+        }
+
+        .sidebar a { 
+            color: white; 
+            text-decoration: none; 
+            display: block; 
+            padding: 12px 10px; 
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover { 
+            background: rgba(255,255,255,0.1);
+            color: #f6c23e; 
+        }
+
+        /* Main Content area */
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 40px;
+        }
+
+        /* NEW: Main System Title Styling */
+        .system-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #4e73df;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 15px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #5a5c69;
+            font-size: 20px;
+        }
+
+        /* Info Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 5px solid #4e73df;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-card h4 { margin: 0; color: #888; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .value { font-size: 28px; font-weight: bold; margin-top: 10px; color: #333; }
+
+        .action-box {
+            margin-top: 40px; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .complaint-btn {
+            padding: 12px 20px; 
+            background: #e74a3b; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .complaint-btn:hover { background: #be392c; }
+    </style>
+</head>
+<body onload="loadDashboardData()">
+
+    <div class="sidebar">
+        <h3>User Portal</h3>
+        <a href="index.html">🏠 Home</a>
+        <a href="profile.html">👤 My Profile</a>
+        <a href="complaint.html">📝 Complaints</a>
+        <hr style="opacity: 0.2; margin: 20px 0;">
+        <a href="#" onclick="logout()" style="color: #ff9b9b;">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="system-title"></div>
+        
+        <div class="header">
+            <h2>User Dashboard</h2>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h4>Your Room Number</h4>
+                <div class="value" id="displayRoom">Loading...</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #1cc88a;">
+                <h4>Hostel ID</h4>
+                <div class="value" id="displayHostelID">Loading...</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #36b9cc;">
+                <h4>Occupancy Status</h4>
+                <div class="value">Occupied</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #f6c23e;">
+                <h4>Monthly Rent</h4>
+                <div class="value">Paid</div>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <h3>Quick Actions</h3>
+            <p style="color: #666;">Need maintenance? Report any issues directly to the warden.</p>
+            <button class="complaint-btn" onclick="window.location.href='complaint.html'">
+                Report a Maintenance Issue
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function loadDashboardData() {
+            if(localStorage.getItem("loggedIn") !== "true"){
+                window.location.href="login.html";
+                return;
+            }
+
+            let studentData = JSON.parse(localStorage.getItem("studentProfile"));
+
+            if(studentData) {
+                document.getElementById("displayRoom").innerText = studentData.roomNo || "Not Assigned";
+                document.getElementById("displayHostelID").innerText = studentData.hostelId || "Not Set";
+            } else {
+                document.getElementById("displayRoom").innerText = "N/A";
+                document.getElementById("displayHostelID").innerText = "N/A";
+            }
+        }
+
+        function logout(){
+            localStorage.removeItem("loggedIn");
+            window.location.href="login.html";
+        }
+    </script>
+</body>
+</html>

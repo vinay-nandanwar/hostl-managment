@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Hostel Management System</title>
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --dark: #2e59d9;
+            --text: #333;
+            --light: #f8f9fc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            color: var(--text);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+
+        /* Navbar with Login at Right Top */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(78, 115, 223, 0.8), rgba(28, 200, 138, 0.8)), 
+                        url('https://images.unsplash.com/photo-1555854817-5b2260d50c47?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 48px; margin-bottom: 10px; }
+        .hero p { font-size: 20px; max-width: 600px; }
+
+        /* Hostel Details Section */
+        .details-section {
+            padding: 60px 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .info-card:hover { transform: translateY(-10px); }
+        .info-card h3 { color: var(--primary); margin-bottom: 15px; }
+
+        /* Facility Icons/List */
+        .facilities {
+            background: white;
+            padding: 60px 10%;
+            text-align: center;
+        }
+
+        .facility-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .facility-item { margin: 20px; width: 150px; }
+        .facility-item span { font-size: 40px; display: block; margin-bottom: 10px; }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MOONLIGHT HOSTEL</div>
+        <div class="nav-links">
+            <a href="login.html" class="login-btn">Login / Portal</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Your Home Away From Home</h1>
+        <p>Providing safe, affordable, and high-quality living spaces for students since 2010.</p>
+    </header>
+
+    <section class="details-section">
+        <div class="info-card">
+            <h3>🏢 Accommodation</h3>
+            <p>We offer well-ventilated Single, Double, and Triple sharing rooms. Each room is equipped with ergonomic study tables, spacious cupboards, and comfortable bedding.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>🍽️ Mess & Nutrition</h3>
+            <p>Our kitchen provides 4 meals a day (Breakfast, Lunch, Tea, and Dinner). We focus on balanced nutrition with a menu that changes weekly to provide variety.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>🛡️ Safety & Security</h3>
+            <p>24/7 CCTV surveillance, biometric entry/exit systems, and dedicated security personnel ensure that our residents are always safe within the premises.</p>
+        </div>
+    </section>
+
+    
+    <section class="facilities">
+        <h2>Hostel Facilities</h2>
+        <div class="facility-grid">
+            <div class="facility-item"><span>📶</span><strong>High-speed Wi-Fi</strong></div>
+            <div class="facility-item"><span>🧺</span><strong>Laundry Service</strong></div>
+            <div class="facility-item"><span>🧹</span><strong>Daily Cleaning</strong></div>
+            <div class="facility-item"><span>🏸</span><strong>Recreation Area</strong></div>
+            <div class="facility-item"><span>💧</span><strong>24/7 Water & RO</strong></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Hostel Management System | Jamtha, Maharashtra</p>
+        <p>Contact: +91 98765 43210 | info@hostelpro.com</p>
+    </footer>
+
+</body>
+</html>

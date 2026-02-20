@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Complaint - Hostel Management</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-card, .list-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        h2, h3 { color: #4e73df; margin-top: 0; }
+
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        textarea { height: 100px; resize: vertical; }
+
+        .row { display: flex; gap: 15px; }
+        .row div { flex: 1; }
+
+        button {
+            background: #4e73df;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #2e59d9; }
+
+        .complaint-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .complaint-item:last-child { border: none; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            float: right;
+        }
+
+        .status-pending { background: #ffeeba; color: #856404; }
+        .status-resolved { background: #c3e6cb; color: #155724; }
+
+        .meta-info { font-size: 13px; color: #888; margin-bottom: 8px; }
+        
+        .back-link { text-decoration: none; color: #4e73df; font-weight: bold; }
+    </style>
+</head>
+<body onload="checkLogin(); loadComplaints();">
+
+<div class="container">
+    <a href="index.html" class="back-link">⬅ Back to Dashboard</a>
+    
+    <div class="form-card">
+        <h2>Lodge a Complaint</h2>
+        <div class="row">
+            <div>
+                <label>Issue Category</label>
+                <select id="category">
+                    <option value="Plumbing">Plumbing (Leaking tap, Flush, etc.)</option>
+                    <option value="Electrical">Electrical (Fan, Light, Socket)</option>
+                    <option value="Furniture">Furniture (Bed, Cupboard, Desk)</option>
+                    <option value="Cleaning">Cleaning / Housekeeping</option>
+                    <option value="Internet">Wi-Fi / Internet</option>
+                    <option value="Mess">Food / Mess Issue</option>
+                    <option value="Other">Other Issue</option>
+                </select>
+            </div>
+            <div>
+                <label>Urgency Level</label>
+                <select id="priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High (Emergency)</option>
+                </select>
+            </div>
+        </div>
+
+        <label>Describe the Problem</label>
+        <textarea id="complaintText" placeholder="Please provide details (e.g., Room 302 fan is making a loud noise)"></textarea>
+        
+        <button onclick="addComplaint()">Submit Complaint</button>
+    </div>
+
+    <div class="list-card">
+        <h3>Recent Complaints & History</h3>
+        <div id="complaintList">
+            </div>
+    </div>
+</div>
+
+<script>
+    function checkLogin(){
+        if(localStorage.getItem("loggedIn") !== "true"){
+            window.location.href="login.html";
+        }
+    }
+
+    function addComplaint(){
+        let category = document.getElementById("category").value;
+        let priority = document.getElementById("priority").value;
+        let text = document.getElementById("complaintText").value;
+        let student = JSON.parse(localStorage.getItem("studentProfile")) || {name: "Guest", roomNo: "N/A"};
+
+        if(text === ""){ alert("Please describe your issue"); return;}
+
+        let complaints = JSON.parse(localStorage.getItem("complaints")) || [];
+        
+        let newEntry = {
+            id: Date.now(),
+            studentName: student.name,
+            room: student.roomNo,
+            category: category,
+            priority: priority,
+            text: text,
+            response: "",
+            status: "Pending",
+            date: new Date().toLocaleDateString()
+        };
+
+        complaints.unshift(newEntry); // Adds to top of list
+        localStorage.setItem("complaints", JSON.stringify(complaints));
+        
+        document.getElementById("complaintText").value = "";
+        alert("Complaint registered successfully!");
+        loadComplaints();
+    }
+
+    function loadComplaints(){
+        let complaints = JSON.parse(localStorage.getItem("complaints")) || [];
+        let role = localStorage.getItem("role") || "student"; // Default to student
+        let list = document.getElementById("complaintList");
+        list.innerHTML = complaints.length === 0 ? "<p style='color:#888;'>No complaints found.</p>" : "";
+
+        complaints.forEach((c, index) => {
+            let statusClass = c.status === "Pending" ? "status-pending" : "status-resolved";
+            
+            let div = document.createElement("div");
+            div.className = "complaint-item";
+            div.innerHTML = `
+                <span class="status-badge ${statusClass}">${c.status}</span>
+                <div class="meta-info">
+                    <strong>${c.category}</strong> | Priority: ${c.priority} | Date: ${c.date}
+                </div>
+                <div style="margin-bottom:10px;">${c.text}</div>
+            `;
+
+            if(c.response){
+                div.innerHTML += `
+                    <div style="background:#f8f9fc; padding:10px; border-radius:5px; border-left:3px solid #1cc88a; font-size:13px;">
+                        <strong>Warden's Response:</strong> ${c.response}
+                    </div>
+                `;
+            }
+
+            // Show Reply box only if user is Admin and no response exists
+            if(role === "admin" && !c.response){
+                div.innerHTML += `
+                    <div style="margin-top:10px;">
+                        <input type="text" id="res${index}" placeholder="Resolve this issue..." style="width:70%; margin-bottom:0;">
+                        <button onclick="addResponse(${index})" style="padding:8px 15px; font-size:12px; background:#1cc88a;">Resolve</button>
+                    </div>
+                `;
+            }
+
+            list.appendChild(div);
+        });
+    }
+
+    function addResponse(index){
+        let complaints = JSON.parse(localStorage.getItem("complaints"));
+        let responseText = document.getElementById("res" + index).value;
+        
+        if(responseText === "") { alert("Enter a response"); return; }
+
+        complaints[index].response = responseText;
+        complaints[index].status = "Resolved";
+        localStorage.setItem("complaints", JSON.stringify(complaints));
+        loadComplaints();
+    }
+</script>
+
+</body>
+</html>
